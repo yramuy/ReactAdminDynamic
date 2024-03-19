@@ -1,18 +1,89 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { GetApiService, PostApiService } from "../api";
+import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
 
     const [isActive, setIsActive] = useState(false);
     const [isConfig, setIsConfig] = useState(false);
     const loginUser = sessionStorage.getItem('userName');
+    const loginUserId = sessionStorage.getItem('userId');
     const userRole = sessionStorage.getItem('userRole');
+    const [catList, setCatList] = useState([]);
+    const [subcatList, setSubcatList] = useState([]);
+    const [catId, setCatId] = useState('');
+    const [subcatId, setSubcatId] = useState('');
+    const [lev3Id, setLev3Id] = useState('');
+
+    const navigate = useNavigate();
 
     const handleClick = () => {
         setIsActive(!isActive);
     }
-    const handleConfig = () => {
-        setIsConfig(!isConfig);
+    const handleConfig = (value) => {
+        setCatId(value);
+    }
+    const handleSubcat = (subid) => {
+        setSubcatId(subid);
+    }
 
+    const handleLevel3 = (level3_id) => {
+        setLev3Id(level3_id);
+    }
+
+    useEffect(() => {
+        fetchMenus();
+    }, []);
+
+    const fetchMenus = async () => {
+        const url = "/BillsPayeApis/v1/dynamicMenus";
+        await GetApiService(url).then((data) => {
+            setCatList(data.level1menus);
+        });
+    }
+
+    const renderSubcategories = (level2menus) => {
+        return (
+            <ul class="nav nav-treeview">
+                {level2menus.map(subcategory => (
+                    <li key={subcategory.sub_category_id} className={subcategory.sub_category_id === subcatId ? 'nav-item menu-open' : 'nav-item'} onClick={() => handleSubcat(subcategory.sub_category_id)}>
+                        <a href="#" className={subcategory.sub_category_id === subcatId ? 'nav-link active' : 'nav-link'} onClick={(e) => handleMenu(e, 'L2', subcategory.sub_category_id)}>
+                            <i class="far fa-compass nav-icon"></i>
+                            <p>
+                                {subcategory.sub_category_name}
+                                {subcategory.level3menus.length > 0 ? (<i class="right fas fa-angle-left"></i>) : ""}
+                            </p>
+                        </a>
+                        {renderLevel3Menus(subcategory.level3menus)}
+
+                    </li>
+                ))}
+            </ul>
+
+        );
+    }
+
+    const renderLevel3Menus = (level3menus) => {
+        return (
+            <ul class="nav nav-treeview">
+                {level3menus.map((menu) => (
+                    <li class="nav-item" key={menu.level3_id} onClick={() => handleLevel3(menu.level3_id)}>
+                        <a href="#" className={menu.level3_id === lev3Id ? 'nav-link active' : 'nav-link'} onClick={(e) => handleMenu(e, 'L3', menu.level3_id)}>
+                            <i class="far fa-dot-circle nav-icon"></i>
+                            <p>{menu.child_sub_name}</p>
+                        </a>
+                    </li>
+                ))}
+
+            </ul>
+        );
+    }
+
+    const handleMenu = (e, val, id) => {
+        e.preventDefault();
+        console.log(val)
+        sessionStorage.setItem("Level", val);
+        navigate(`/menu/${id}`);
     }
 
     return (
@@ -68,65 +139,18 @@ const Sidebar = () => {
                                     </p>
                                 </a>
                             </li>
-
-                            <li class={isActive ? 'nav-item menu-open' : 'nav-item'} onClick={handleClick}>
-                                <a href="#" class={isActive ? 'nav-link active' : 'nav-link'}>
-                                    <i class="nav-icon fas fa-tachometer-alt"></i>
-                                    <p>
-                                        Dashboard
-                                        <i class="right fas fa-angle-left"></i>
-                                    </p>
-                                </a>
-                                <ul class="nav nav-treeview">
-                                    <li class="nav-item">
-                                        <a href="./index.html" class="nav-link active">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Dashboard v1</p>
+                            {
+                                catList.map((cat, index) =>
+                                (
+                                    <li className={cat.id === catId ? 'nav-item menu-open' : 'nav-item'} onClick={() => handleConfig(cat.id)}>
+                                        <a href="" className={cat.id === catId ? 'nav-link active' : 'nav-link'} onClick={(e) => handleMenu(e, 'L1', cat.id)}>
+                                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                                            <p>{cat.name}{cat.level2menus.length > 0 ? (<i class="right fas fa-angle-left"></i>) : ''}</p>
                                         </a>
+                                        {renderSubcategories(cat.level2menus)}
                                     </li>
-                                    <li class="nav-item">
-                                        <a href="./index2.html" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Dashboard v2</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="./index3.html" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Dashboard v3</p>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class={isConfig ? 'nav-item menu-open' : 'nav-item'} onClick={handleConfig}>
-                                <a href="#" class={isConfig ? 'nav-link active' : 'nav-link'}>
-                                    <i class="nav-icon fas fa-cog"></i>
-                                    <p>
-                                        Configurations
-                                        <i class="right fas fa-angle-left"></i>
-                                    </p>
-                                </a>
-                                <ul class="nav nav-treeview">
-                                    <li class="nav-item">
-                                        <a href="/category" class="nav-link">
-                                            <i class="nav-icon fas fa-folder"></i>
-                                            <p>Category</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="./index2.html" class="nav-link">
-                                            <i class="nav-icon fas fa-chart-bar"></i>
-                                            <p>Subcategory</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="./index3.html" class="nav-link">
-                                            <i class="nav-icon fas fa-gift"></i>
-                                            <p>Items</p>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
+                                ))
+                            }
 
                         </ul>
                     </nav>
