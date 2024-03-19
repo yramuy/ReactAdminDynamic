@@ -47,7 +47,7 @@ const Sidebar = () => {
             <ul class="nav nav-treeview">
                 {level2menus.map(subcategory => (
                     <li key={subcategory.sub_category_id} className={subcategory.sub_category_id === subcatId ? 'nav-item menu-open' : 'nav-item'} onClick={() => handleSubcat(subcategory.sub_category_id)}>
-                        <a href="#" className={subcategory.sub_category_id === subcatId ? 'nav-link active' : 'nav-link'} onClick={(e) => handleMenu(e, 'L2', subcategory.sub_category_id)}>
+                        <a href="#" className={subcategory.sub_category_id === subcatId ? 'nav-link active' : 'nav-link'} onClick={(e) => handleMenu(e, 'L2', subcategory.sub_category_id,subcategory.sub_category_name)}>
                             <i class="far fa-compass nav-icon"></i>
                             <p>
                                 {subcategory.sub_category_name}
@@ -68,7 +68,7 @@ const Sidebar = () => {
             <ul class="nav nav-treeview">
                 {level3menus.map((menu) => (
                     <li class="nav-item" key={menu.level3_id} onClick={() => handleLevel3(menu.level3_id)}>
-                        <a href="#" className={menu.level3_id === lev3Id ? 'nav-link active' : 'nav-link'} onClick={(e) => handleMenu(e, 'L3', menu.level3_id)}>
+                        <a href="#" className={menu.level3_id === lev3Id ? 'nav-link active' : 'nav-link'} onClick={(e) => handleMenu(e, 'L3', menu.level3_id, menu.child_sub_name)}>
                             <i class="far fa-dot-circle nav-icon"></i>
                             <p>{menu.child_sub_name}</p>
                         </a>
@@ -79,10 +79,17 @@ const Sidebar = () => {
         );
     }
 
-    const handleMenu = (e, val, id) => {
+    const handleMenu = (e, val, id, menu) => {
         e.preventDefault();
         console.log(val)
         sessionStorage.setItem("Level", val);
+        if (val === "L2") {
+            sessionStorage.setItem("subCat", menu);
+        } else {
+            sessionStorage.setItem("childSubcat", menu);
+        }
+        
+        
         navigate(`/menu/${id}`);
     }
 
@@ -143,7 +150,7 @@ const Sidebar = () => {
                                 catList.map((cat, index) =>
                                 (
                                     <li className={cat.id === catId ? 'nav-item menu-open' : 'nav-item'} onClick={() => handleConfig(cat.id)}>
-                                        <a href="" className={cat.id === catId ? 'nav-link active' : 'nav-link'} onClick={(e) => handleMenu(e, 'L1', cat.id)}>
+                                        <a href="" className={cat.id === catId ? 'nav-link active' : 'nav-link'} onClick={(e) => handleMenu(e, 'L1', cat.id, '')}>
                                             <i class="nav-icon fas fa-tachometer-alt"></i>
                                             <p>{cat.name}{cat.level2menus.length > 0 ? (<i class="right fas fa-angle-left"></i>) : ''}</p>
                                         </a>

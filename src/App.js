@@ -9,6 +9,7 @@ import Logout from "./components/logout";
 import Category from "./components/pages/category";
 import Signup from "./components/pages/signup";
 import Menu from "./components/pages/menu";
+import ItemDetails from "./components/pages/item_details";
 
 function App() {
   
@@ -23,6 +24,7 @@ function App() {
           <Route path="/logout" element={<Logout />} />
           <Route path="/register" element={<Signup />} />
           <Route path="/menu/:levelId" element={<Menu />}/>
+          <Route path="/item_details/:itemId" element={<ItemDetails />}/>
         </Routes>
       </BrowserRouter>
     </div>
