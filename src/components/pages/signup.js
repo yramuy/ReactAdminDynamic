@@ -27,14 +27,14 @@ const Signup = () => {
     }, []);
 
     const GetStates = async () => {
-        const url = '/BillsPayeApis/v1/states';
+        const url = '/AdminApis/v1/states';
         await GetApiService(url).then((data) => {
             setStates(data.states);
         });
     }
 
     const handleOTP = async () => {
-        const url = '/BillsPayeApis/v1/sendOTP';
+        const url = '/AdminApis/v1/sendOTP';
         const body = JSON.stringify({
             mobileNumber: mobnumber
         });
@@ -72,7 +72,7 @@ const Signup = () => {
 
     const handleSignUp = async (e) => {
         e.preventDefault();
-        const url = '/BillsPayeApis/v1/signUp';
+        const url = '/AdminApis/v1/signUp';
         const body = JSON.stringify({
             first_name: fname,
             last_name: lname,
@@ -96,7 +96,7 @@ const Signup = () => {
 
     const handleState = async (stateId) => {
         setState(stateId);
-        const url = '/BillsPayeApis/v1/citiesByState';
+        const url = '/AdminApis/v1/citiesByState';
         const body = JSON.stringify({
             state_id: stateId
         });

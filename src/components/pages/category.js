@@ -9,7 +9,7 @@ const Category = () => {
     }, []);
 
     const fetchCategories = async () => {
-        const url = '/BillsPayeApis/v1/categories';
+        const url = '/AdminApis/v1/categories';
         await GetApiService(url).then((data) => {
             if (data.status == 1) {
                 setCategories(data.category);

@@ -36,7 +36,7 @@ const Sidebar = () => {
     }, []);
 
     const fetchMenus = async () => {
-        const url = "/BillsPayeApis/v1/dynamicMenus";
+        const url = "/AdminApis/v1/dynamicMenus";
         await GetApiService(url).then((data) => {
             setCatList(data.level1menus);
         });

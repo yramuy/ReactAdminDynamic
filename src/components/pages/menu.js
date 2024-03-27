@@ -16,7 +16,7 @@ const Menu = () => {
 
     const GetItems = async () => {
 
-        const url = "/BillsPayeApis/v1/items";
+        const url = "/AdminApis/v1/items";
         const body = JSON.stringify({
             id: levelId
         });
@@ -52,8 +52,8 @@ const Menu = () => {
                             items.length > 0 ? items.map((item) => (
                                 <div class="col-md-4">
                                     <a href={`/item_details/${item.id}`} className="card-link" style={cardStyle}>
-                                        <div class="card">
-                                            <img src={item.item_img} class="card-img-top" alt="..." style={{ height: "18em", width: "18em", position: "relative", top: "10px" }} />
+                                        <div class="card" style={{height: "335px"}}>
+                                            <img src={item.item_img} class="card-img-top" alt="..." style={{ height: "11em", width: "18em", position: "relative", top: "10px" }} />
                                             <div class="card-body">
                                                 <h5 class="card-title"><b>{item.name}</b></h5>
 

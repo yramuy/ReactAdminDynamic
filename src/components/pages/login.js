@@ -11,7 +11,7 @@ const Login = () => {
         e.preventDefault();
 
         try {
-            const url = '/BillsPayeApis/v1/login';
+            const url = '/AdminApis/v1/login';
             const body = JSON.stringify({
                 username: userName,
                 password: password
