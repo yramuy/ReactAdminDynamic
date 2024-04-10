@@ -1,18 +1,24 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Layout from "../layout";
 import { useEffect, useState } from "react";
 import { PostApiService } from "../api";
+import { useDispatch } from "react-redux";
 
 const ItemDetails = () => {
     const { itemId } = useParams();
     const [itemDetails, setItemDetails] = useState([]);
     const [discount, setDiscount] = useState("");
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     useEffect(() => {
         GetItemDetails();
     }, [itemId]);
 
     const GetItemDetails = async () => {
+
         const url = "/AdminApis/v1/itemDetails";
+        
         const body = JSON.stringify({
             item_id: itemId
         });
@@ -21,6 +27,10 @@ const ItemDetails = () => {
             if (data.status === 1) {
                 var response = data.itemDetails[0];
                 setItemDetails(response);
+                dispatch({ type: "LEVEL1", payload: response.cat_id});
+                dispatch({ type: "LEVEL2", payload: response.sub_cat_id});
+                dispatch({ type: "LEVEL3", payload: response.sub_cat_child_id});
+                dispatch({ type: "ITEM", payload: response});
             } else {
                 setItemDetails([]);
             }
@@ -33,6 +43,10 @@ const ItemDetails = () => {
 	var discountedPrice = originalPrice - discountAmount;
     var payAmount = originalPrice - discountedPrice;
 
+    const addToCart = () => {
+        navigate(`/addToCart/${itemId}`);
+    }
+
 
     console.log(itemDetails)
     return (
@@ -41,12 +55,12 @@ const ItemDetails = () => {
                 <div className="row" style={{ display: "flex", gap: "0px" }}>
                     <div class="col-sm-6 bg-primary1">
                         <div class="card" style={{ height: '32rem' }}>
-                            <img class="card-img-top" src={itemDetails.item_img} alt="Card image" style={{ width: "100%", height: "18em" }} />
+                            <img class="card-img-top" src={itemDetails.item_img} alt="Card image" style={{ width: "65%", height: "18em" }} />
                             <div class="card-body">
                                 <h4 class="card-title bold-text">{itemDetails.name}</h4>
                                 <p class="card-text">{itemDetails.description}</p>
                                 <p style={{ display: "flex", gap: "10px" }}>
-                                    <a href="#" class="btn btn-warning bold-text" style={{ backgroundColor: "#ff9f00", color: "white" }}><i class="fas fa-cart-plus"></i> ADD TO CART</a>
+                                    <button class="btn btn-warning bold-text" style={{ backgroundColor: "#ff9f00", color: "white" }} onClick={() => addToCart()}><i class="fas fa-cart-plus"></i> ADD TO CART</button>
                                     <a href="#" class="btn btn-primary bold-text" style={{ backgroundColor: "#fb641b", color: "white" }}><i class="fab fa-buysellads"></i> BUY NOW</a>
                                 </p>
                             </div>

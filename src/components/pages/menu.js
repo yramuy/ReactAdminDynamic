@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../layout";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { PostApiService } from "../api";
+import { useDispatch } from "react-redux";
 
 const Menu = () => {
     const { levelId } = useParams();
@@ -9,6 +10,7 @@ const Menu = () => {
     const subMenu = sessionStorage.getItem("subCat");
     const childSubcat = sessionStorage.getItem("childSubcat");
     const [items, setItems] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         GetItems();
@@ -32,6 +34,10 @@ const Menu = () => {
         color: 'inherit' // Use the default text color
     };
 
+    const handleItem = (id) => {
+        navigate(`/item_details/${id}`);
+    }
+
     return (
         <>
             <Layout>
@@ -51,9 +57,9 @@ const Menu = () => {
                         {
                             items.length > 0 ? items.map((item) => (
                                 <div class="col-md-4">
-                                    <a href={`/item_details/${item.id}`} className="card-link" style={cardStyle}>
+                                    <a href="" className="card-link" style={cardStyle} onClick={() => handleItem(item.id)}>
                                         <div class="card" style={{height: "335px"}}>
-                                            <img src={item.item_img} class="card-img-top" alt="..." style={{ height: "11em", width: "18em", position: "relative", top: "10px" }} />
+                                            <img src={item.item_img} class="card-img-top" alt="..." style={{ height: "11em", width: "65%", position: "relative", top: "10px" }} />
                                             <div class="card-body">
                                                 <h5 class="card-title"><b>{item.name}</b></h5>
 

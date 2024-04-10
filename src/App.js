@@ -10,6 +10,9 @@ import Category from "./components/pages/category";
 import Signup from "./components/pages/signup";
 import Menu from "./components/pages/menu";
 import ItemDetails from "./components/pages/item_details";
+import AddToCart from "./components/pages/addToCart";
+import AddTimesheet from "./components/pages/addTimesheet";
+import SaveTimesheetItem from "./components/pages/saveTimesheetItem";
 
 function App() {
   
@@ -25,6 +28,9 @@ function App() {
           <Route path="/register" element={<Signup />} />
           <Route path="/menu/:levelId" element={<Menu />}/>
           <Route path="/item_details/:itemId" element={<ItemDetails />}/>
+          <Route path="/addToCart/:item" element={<AddToCart />}/>
+          <Route path="/addTimesheet" element={<AddTimesheet />}/>
+          <Route path="/saveTimesheetItem" element={<SaveTimesheetItem />}/>
         </Routes>
       </BrowserRouter>
     </div>
