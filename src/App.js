@@ -13,6 +13,8 @@ import ItemDetails from "./components/pages/item_details";
 import AddToCart from "./components/pages/addToCart";
 import AddTimesheet from "./components/pages/addTimesheet";
 import SaveTimesheetItem from "./components/pages/saveTimesheetItem";
+import AddCheckList from "./components/pages/addCheckList";
+import ViewCheckList from "./components/pages/viewCheckList";
 
 function App() {
   
@@ -31,6 +33,8 @@ function App() {
           <Route path="/addToCart/:item" element={<AddToCart />}/>
           <Route path="/addTimesheet" element={<AddTimesheet />}/>
           <Route path="/saveTimesheetItem" element={<SaveTimesheetItem />}/>
+          <Route path="/addCheckList" element={<AddCheckList />}/>
+          <Route path="/viewCheckList" element={<ViewCheckList />}/>
         </Routes>
       </BrowserRouter>
     </div>

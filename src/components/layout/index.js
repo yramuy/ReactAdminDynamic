@@ -7,12 +7,18 @@ import { useNavigate } from "react-router-dom";
 const Layout = ({ children }) => {
     const navigate = useNavigate();
     const isLogin = sessionStorage.getItem('isLogin');
+    
     useEffect(() => {
-        if (isLogin == 'false') {
-            console.log('isLogin: ', isLogin)
+        checkLogin();
+    }, []);
+    
+    const checkLogin = () => {
+        if (isLogin === false || isLogin === null) {
+            console.log('isLogin111: ', isLogin)
             navigate('/login', { replace: true });
         }
-    }, []);
+    }
+    
     return (
         <>
             <body class="hold-transition sidebar-mini layout-fixed">

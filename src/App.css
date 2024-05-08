@@ -32,6 +32,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -122,9 +123,12 @@ footer {
   height: 1px;
   background-color: #000;
 }
+
 .curved-rectangle {
-  border-radius: 30px; /* Adjust the radius as needed */
-  padding: 2px; /* Adjust padding as needed */
+  border-radius: 30px;
+  /* Adjust the radius as needed */
+  padding: 2px;
+  /* Adjust padding as needed */
   width: 3.5rem;
   background-color: #26a541;
   color: white;
@@ -150,8 +154,8 @@ footer {
 }
 
 .alert-success {
-  bottom: 2.5em;
-  left: 35em;
+  bottom: 0.5em;
+  left: 47em;
 }
 
 .star {
@@ -186,7 +190,7 @@ footer {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.3);
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
 /* :not(:required) hides these rules from IE9 and below */
@@ -226,6 +230,7 @@ footer {
     -o-transform: rotate(0deg);
     transform: rotate(0deg);
   }
+
   100% {
     -webkit-transform: rotate(360deg);
     -moz-transform: rotate(360deg);
@@ -234,6 +239,7 @@ footer {
     transform: rotate(360deg);
   }
 }
+
 @-moz-keyframes spinner {
   0% {
     -webkit-transform: rotate(0deg);
@@ -242,6 +248,7 @@ footer {
     -o-transform: rotate(0deg);
     transform: rotate(0deg);
   }
+
   100% {
     -webkit-transform: rotate(360deg);
     -moz-transform: rotate(360deg);
@@ -250,6 +257,7 @@ footer {
     transform: rotate(360deg);
   }
 }
+
 @-o-keyframes spinner {
   0% {
     -webkit-transform: rotate(0deg);
@@ -258,6 +266,7 @@ footer {
     -o-transform: rotate(0deg);
     transform: rotate(0deg);
   }
+
   100% {
     -webkit-transform: rotate(360deg);
     -moz-transform: rotate(360deg);
@@ -266,6 +275,7 @@ footer {
     transform: rotate(360deg);
   }
 }
+
 @keyframes spinner {
   0% {
     -webkit-transform: rotate(0deg);
@@ -274,6 +284,7 @@ footer {
     -o-transform: rotate(0deg);
     transform: rotate(0deg);
   }
+
   100% {
     -webkit-transform: rotate(360deg);
     -moz-transform: rotate(360deg);
@@ -281,4 +292,112 @@ footer {
     -o-transform: rotate(360deg);
     transform: rotate(360deg);
   }
+}
+
+/* Custom CSS for the expandable list */
+.expandable-list .list-group-item {
+  cursor: pointer;
+}
+
+.accordion-Container {
+  width: 100%;
+}
+
+.rating-md {
+  font-size: 2em;
+}
+
+.accordion-Container label.acTab {
+  padding: 1px 0px 1px 1em;
+}
+
+.multi-open,
+.single-open {
+  border: 1px solid #9b9b9b;
+}
+
+/* Acordeon styles */
+.accordion-Container .tab {
+  position: relative;
+  margin-bottom: 5px;
+  width: 100%;
+  color: #313131;
+  overflow: hidden;
+}
+
+.accordion-Container .inputtab {
+  position: absolute;
+  opacity: 0;
+  z-index: -1;
+}
+
+.accordion-Container label.acTab {
+  position: relative;
+  display: block;
+  /*padding: 0 0 0 1em;*/
+  background: #e6e4e4;
+  font-weight: bold;
+  line-height: 3;
+  cursor: pointer;
+}
+
+.accordion-Container .blue label.acTab {
+  background: #ffffff;
+}
+
+.accordion-Container .tab-content {
+  max-height: 0;
+  overflow: hidden;
+  background: #f7f7f7;
+  -webkit-transition: max-height .35s;
+  -o-transition: max-height .35s;
+  transition: max-height .35s;
+}
+
+.accordion-Container .blue .tab-content {
+  background: #e9e9e9;
+}
+
+.accordion-Container .tab-content p {
+  margin: 1em;
+}
+
+/* :checked */
+.accordion-Container input:checked~.tab-content {
+  max-height: 100em;
+}
+
+/* Icon */
+.accordion-Container label.acTab::after {
+
+  position: absolute;
+  right: 0;
+  top: -5px;
+  display: block;
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  text-align: center;
+  -webkit-transition: all .35s;
+  -o-transition: all .35s;
+  transition: all .35s;
+  border-radius: 50%;
+  margin: 8px 10px;
+  color: black;
+  font-size: 22px;
+
+}
+
+.accordion-Container input[type=checkbox]+label.acTab::after {
+  content: '<';
+  font-size: 15px;
+  font-weight: 15px;
+
+}
+
+.accordion-Container input[type=checkbox]:checked+label.acTab::after {
+  transform: rotate(180deg);
+  content: "^";
+  font-size: 15px;
+  font-weight: 15px;
 }

@@ -1,15 +1,15 @@
 // import { useEffect } from "react";
 // import { useNavigate } from "react-router-dom";
 
+import { useSelector } from "react-redux";
+
 const Header = () => {
-    // const navigate = useNavigate();
-    // const isLogin = sessionStorage.getItem('isLogin');
-    // useEffect(() => {
-    //     if (isLogin == 'false') {
-    //         console.log('isLogin: ', isLogin)
-    //         navigate('/login', { replace: true });
-    //     }
-    // }, []);
+    const userRoleId = sessionStorage.getItem('userRoleId');
+
+    let item = useSelector((state) => {
+        return state.menuDetails;
+    });
+    
     return (
         <>
             {/* <!-- Navbar --> */}
@@ -40,29 +40,18 @@ const Header = () => {
 
                 {/* <!-- Right navbar links --> */}
                 <ul class="navbar-nav ml-auto">
-                    {/* <!-- Navbar Search --> */}
-                    <li class="nav-item">
-                        <a class="nav-link" data-widget="navbar-search" href="#" role="button">
-                            <i class="fas fa-search"></i>
-                        </a>
-                        <div class="navbar-search-block">
-                            <form class="form-inline">
-                                <div class="input-group input-group-sm">
-                                    <input class="form-control form-control-navbar" type="search" placeholder="Search"
-                                        aria-label="Search" />
-                                    <div class="input-group-append">
-                                        <button class="btn btn-navbar" type="submit">
-                                            <i class="fas fa-search"></i>
-                                        </button>
-                                        <button class="btn btn-navbar" type="button" data-widget="navbar-search">
-                                            <i class="fas fa-times"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </li>
-
+                    {
+                        userRoleId === '1' || userRoleId === '3' ? (
+                            <li class="nav-item">
+                                <a class="nav-link" data-widget="fullscreen" href={`/addToCart/${item.itemDetails.id}`} role="button">
+                                    <span class="position-relative">
+                                        <i class="fas fa-cart-plus"></i> Cart
+                                        <span class="position-absolute top-2 start-100 translate-middle badge rounded-pill bg-danger">{item.badge}</span>
+                                    </span>
+                                </a>
+                            </li>
+                        ) : ''
+                    }
                     <li class="nav-item">
                         <a class="nav-link" data-widget="fullscreen" href="#" role="button">
                             <i class="fas fa-expand-arrows-alt"></i>

@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { PostApiService } from "../api";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 const Login = () => {
 
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
+    const [showSnackbar, setShowSnackbar] = useState(false);
+    const dispatch = useDispatch();
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -31,19 +34,30 @@ const Login = () => {
                     sessionStorage.setItem("isLogin", true);
 
                     console.log("userData : ", userData)
+                    dispatch({ type: "DISPLAYMSG", payload: data.message });
+                    setShowSnackbar(true);
+                    setTimeout(() => setShowSnackbar(false), 5000);
 
                     navigate('/', { replace: true });
 
                 } else {
                     // setShowMsg(true);
+                    dispatch({ type: "DISPLAYMSG", payload: data.message });
+                    setShowSnackbar(true);
+                    setTimeout(() => setShowSnackbar(false), 5000);
                     navigate('/login', { replace: true });
                 }
+
             });
         } catch (error) {
 
         }
 
     }
+
+    let message = useSelector((state) => {
+        return state.menuDetails.message;
+    });
 
     return (
         <>
@@ -87,6 +101,8 @@ const Login = () => {
                             <a href="/register" class="text-center">Register a new membership</a>
                         </p>
                     </div>
+                    {showSnackbar && <div className="alert alert-info position-fixed bottom-0 end-0" role="alert">
+                        {message}</div>}
                 </div>
             </div>
         </>

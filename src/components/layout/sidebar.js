@@ -10,14 +10,17 @@ const Sidebar = () => {
     const loginUser = sessionStorage.getItem('userName');
     const loginUserId = sessionStorage.getItem('userId');
     const userRole = sessionStorage.getItem('userRole');
+    const userRoleId = sessionStorage.getItem('userRoleId');
     const [catList, setCatList] = useState([]);
+    const [li, setLi] = useState('');
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const location = useLocation();
 
-    const handleClick = () => {
+    const handleClick = (val) => {
         setIsActive(!isActive);
+        setLi(val);
     }
     const handleConfig = (value) => {
 
@@ -50,7 +53,7 @@ const Sidebar = () => {
 
     console.log("Menu Ids", MenuIds);
 
-    
+
 
     const renderSubcategories = (level2menus) => {
         return (
@@ -158,44 +161,83 @@ const Sidebar = () => {
                                     </p>
                                 </a>
                             </li>
-                            <li className={isActive || (location.pathname == '/addTimesheet') || (location.pathname == '/saveTimesheetItem') ? "nav-item menu-open": "nav-item"} onClick={() => handleClick()}>
-                                <a href="#" class={isActive || (location.pathname == '/addTimesheet') || (location.pathname == '/saveTimesheetItem') ? "nav-link active": "nav-link"}>
-                                    <i class="fas fa-tachometer-alt nav-icon"></i>
-                                    <p>
-                                        Timesheet
-                                        <i class="right fas fa-angle-left"></i>
-                                    </p>
-                                </a>
-                                <ul class="nav nav-treeview">
-                                    <li class="nav-item">
-                                        <a href="/addTimesheet" class={location.pathname == '/addTimesheet' ? "nav-link active": "nav-link"}>
-                                            <i class="nav-icon fas fa-plus"></i>
-                                            <p>
-                                                Add Timesheet
-                                            </p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="/saveTimesheetItem" class={location.pathname == '/saveTimesheetItem' ? "nav-link active": "nav-link"}>
-                                            <i class="nav-icon fas fa-running"></i>
-                                            <p>
-                                                Run Timesheet
-                                            </p>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
                             {
-                                catList.map((cat, index) =>
-                                (
-                                    <li className={cat.id === MenuIds.level1Id ? 'nav-item menu-open' : 'nav-item'} onClick={() => handleConfig(cat.id)}>
-                                        <a href="" className={cat.id === MenuIds.level1Id ? 'nav-link active' : 'nav-link'} onClick={(e) => handleMenu(e, 'L1', cat.id, cat.name, cat.level2menus.length)}>
-                                            <i class="nav-icon fas fa-tachometer-alt"></i>
-                                            <p>{cat.name}{cat.level2menus.length > 0 ? (<i class="right fas fa-angle-left"></i>) : ''}</p>
-                                        </a>
-                                        {renderSubcategories(cat.level2menus)}
-                                    </li>
-                                ))
+                                userRoleId === "1" || userRoleId === "2" ? (
+                                    <>
+                                        <li className={li === 'Li1' || (location.pathname == '/addTimesheet') || (location.pathname == '/saveTimesheetItem') ? "nav-item menu-open" : "nav-item"} onClick={() => handleClick('Li1')}>
+                                            <a href="#" class={li === 'Li1' || (location.pathname == '/addTimesheet') || (location.pathname == '/saveTimesheetItem') ? "nav-link active" : "nav-link"}>
+                                                <i class="fas fa-tachometer-alt nav-icon"></i>
+                                                <p>
+                                                    Timesheet
+                                                    <i class="right fas fa-angle-left"></i>
+                                                </p>
+                                            </a>
+                                            <ul class="nav nav-treeview">
+                                                <li class="nav-item">
+                                                    <a href="/addTimesheet" class={location.pathname == '/addTimesheet' ? "nav-link active" : "nav-link"}>
+                                                        <i class="nav-icon fas fa-plus"></i>
+                                                        <p>
+                                                            Add Timesheet
+                                                        </p>
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a href="/saveTimesheetItem" class={location.pathname == '/saveTimesheetItem' ? "nav-link active" : "nav-link"}>
+                                                        <i class="nav-icon fas fa-running"></i>
+                                                        <p>
+                                                            Run Timesheet
+                                                        </p>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li className={li === 'Li2' || (location.pathname == '/addCheckList') || (location.pathname == '/viewCheckList') ? "nav-item menu-open" : "nav-item"} onClick={() => handleClick('Li2')}>
+                                            <a href="#" class={li === 'Li2' || (location.pathname == '/addCheckList') || (location.pathname == '/viewCheckList') ? "nav-link active" : "nav-link"}>
+                                                <i class="fas fa-th-list nav-icon"></i>
+                                                <p>
+                                                    Check List
+                                                    <i class="right fas fa-angle-left"></i>
+                                                </p>
+                                            </a>
+                                            <ul class="nav nav-treeview">
+                                                <li class="nav-item">
+                                                    <a href="/addCheckList" class={location.pathname == '/addCheckList' ? "nav-link active" : "nav-link"}>
+                                                        <i class="nav-icon fas fa-plus-circle"></i>
+                                                        <p>
+                                                            Add CheckList
+                                                        </p>
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a href="/viewCheckList" class={location.pathname == '/viewCheckList' ? "nav-link active" : "nav-link"}>
+                                                        <i class="nav-icon fas fa-ellipsis-v"></i>
+                                                        <p>
+                                                            View CheckList
+                                                        </p>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </>
+
+                                ) : ''
+                            }
+
+
+                            {
+                                userRoleId === "1" || userRoleId === "3" ? (
+                                    catList.map((cat, index) =>
+                                    (
+                                        <li className={cat.id === MenuIds.level1Id ? 'nav-item menu-open' : 'nav-item'} onClick={() => handleConfig(cat.id)}>
+                                            <a href="" className={cat.id === MenuIds.level1Id ? 'nav-link active' : 'nav-link'} onClick={(e) => handleMenu(e, 'L1', cat.id, cat.name, cat.level2menus.length)}>
+                                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                                <p>{cat.name}{cat.level2menus.length > 0 ? (<i class="right fas fa-angle-left"></i>) : ''}</p>
+                                            </a>
+                                            {renderSubcategories(cat.level2menus)}
+                                        </li>
+                                    ))
+                                ) : ''
+
                             }
 
                         </ul>

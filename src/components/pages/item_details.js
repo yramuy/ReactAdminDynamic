@@ -3,6 +3,7 @@ import Layout from "../layout";
 import { useEffect, useState } from "react";
 import { PostApiService } from "../api";
 import { useDispatch } from "react-redux";
+import AddToCart from "./addToCart";
 
 const ItemDetails = () => {
     const { itemId } = useParams();
@@ -10,15 +11,18 @@ const ItemDetails = () => {
     const [discount, setDiscount] = useState("");
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const loginUserId = sessionStorage.getItem('userId');
+    const [cartItemDetails, setCartItemDetails] = useState([]);
 
     useEffect(() => {
         GetItemDetails();
+        GetItemCartDetails();
     }, [itemId]);
 
     const GetItemDetails = async () => {
 
         const url = "/AdminApis/v1/itemDetails";
-        
+
         const body = JSON.stringify({
             item_id: itemId
         });
@@ -27,28 +31,65 @@ const ItemDetails = () => {
             if (data.status === 1) {
                 var response = data.itemDetails[0];
                 setItemDetails(response);
-                dispatch({ type: "LEVEL1", payload: response.cat_id});
-                dispatch({ type: "LEVEL2", payload: response.sub_cat_id});
-                dispatch({ type: "LEVEL3", payload: response.sub_cat_child_id});
-                dispatch({ type: "ITEM", payload: response});
+                dispatch({ type: "LEVEL1", payload: response.cat_id });
+                dispatch({ type: "LEVEL2", payload: response.sub_cat_id });
+                dispatch({ type: "LEVEL3", payload: response.sub_cat_child_id });
+                dispatch({ type: "ITEM", payload: response });
             } else {
                 setItemDetails([]);
             }
         });
     }
+    const GetItemCartDetails = async () => {
+
+        const url = "/AdminApis/v1/CartItemById";
+
+        const body = JSON.stringify({
+            item_id: itemId
+        });
+
+        await PostApiService(url, body).then((data) => {
+            setCartItemDetails(data);
+        });
+    }
 
     var originalPrice = itemDetails.price;
-	var offer = itemDetails.offer; // 20%
-	var discountAmount = originalPrice * (offer / 100);
-	var discountedPrice = originalPrice - discountAmount;
+    var offer = itemDetails.offer; // 20%
+    var discountAmount = originalPrice * (offer / 100);
+    var discountedPrice = originalPrice - discountAmount;
     var payAmount = originalPrice - discountedPrice;
 
-    const addToCart = () => {
+    const addToCart = async () => {
+
+        const url = "/AdminApis/v1/addToCart";
+
+        const body = JSON.stringify({
+            item_id: itemId,
+            quantity: 1,
+            original_price: originalPrice,
+            discount_price: discountedPrice,
+            total_price: payAmount,
+            added_by: loginUserId,
+            payment_status: 0,
+            act: 'add'
+        });
+
+        await PostApiService(url, body).then((response) => {
+            dispatch({ type: "DISPLAYMSG", payload: response.message });
+            dispatch({ type: "SNACKBAR", payload: true });
+            dispatch({ type: "FLAG", payload: true });
+            navigate(`/addToCart/${itemId}`);
+        });
+
+    }
+
+    const GOToCart = () => {
         navigate(`/addToCart/${itemId}`);
     }
 
 
     console.log(itemDetails)
+    console.log('cartItemDetails', cartItemDetails);
     return (
         <Layout>
             <div class="container-fluid mt-3">
@@ -60,7 +101,11 @@ const ItemDetails = () => {
                                 <h4 class="card-title bold-text">{itemDetails.name}</h4>
                                 <p class="card-text">{itemDetails.description}</p>
                                 <p style={{ display: "flex", gap: "10px" }}>
-                                    <button class="btn btn-warning bold-text" style={{ backgroundColor: "#ff9f00", color: "white" }} onClick={() => addToCart()}><i class="fas fa-cart-plus"></i> ADD TO CART</button>
+                                    {
+                                        cartItemDetails === null ? (<button class="btn btn-warning bold-text" style={{ backgroundColor: "#ff9f00", color: "white" }} onClick={() => addToCart()}><i class="fas fa-cart-plus"></i> ADD TO CART</button>) : (<button class="btn btn-warning bold-text" style={{ backgroundColor: "#ff9f00", color: "white" }} onClick={() => GOToCart()}><i class="fas fa-cart-plus"></i> GO TO CART</button>)
+                                    }
+
+
                                     <a href="#" class="btn btn-primary bold-text" style={{ backgroundColor: "#fb641b", color: "white" }}><i class="fab fa-buysellads"></i> BUY NOW</a>
                                 </p>
                             </div>
@@ -70,8 +115,8 @@ const ItemDetails = () => {
                         <div class="card" style={{ height: '32rem' }}>
                             <div class="card-body">
                                 <h4 class="card-title mb-2 bold-text">{itemDetails.name}</h4>
-                                <p class="card-text bold-text" style={{ color: '#26a541'}}>Special price</p>
-                                <p class="card-text bold-text"><span style={{fontSize: '1.5rem' }}>₹{payAmount}</span>
+                                <p class="card-text bold-text" style={{ color: '#26a541' }}>Special price</p>
+                                <p class="card-text bold-text"><span style={{ fontSize: '1.5rem' }}>₹{payAmount}</span>
                                     <span class="crossed-price" style={{ fontSize: '16px', marginLeft: '10px', verticalAlign: 'middle', color: '#878787' }}>₹{discountedPrice}</span>
                                     <span className="bold-text" style={{ marginLeft: '12px', color: '#26a541', fontSize: '1.1rem' }}>{itemDetails.offer}% off</span>
 

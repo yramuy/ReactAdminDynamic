@@ -5,7 +5,11 @@ const initialState = {
     level2Id: "",
     level3Id: "",
     itemDetails: "",
-    message: ""
+    message: "",
+    snackbar: "",
+    flag: false,
+    badge: 0,
+    checklist: {clauseNo: '', id: '', clauseId: ''}
 };
 
 function MenuReducer(state = initialState, action) {
@@ -26,6 +30,18 @@ function MenuReducer(state = initialState, action) {
 
         case "DISPLAYMSG":
             return { ...state, message: payload }
+
+        case "SNACKBAR":
+            return { ...state, snackbar: payload }
+
+        case "FLAG":
+            return { ...state, flag: payload }
+
+        case "BADGE":
+            return { ...state, badge: payload }
+
+        case "CHECKLIST":
+            return { ...state, checklist: payload}
 
         default:
             return state;
